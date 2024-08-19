@@ -195,6 +195,31 @@ var removeElements = function (head, val) {
   return dummy.next;
 };
 
+const temp = new ListNode(
+  1,
+  new ListNode(
+    2,
+    new ListNode(
+      6,
+      new ListNode(3, new ListNode(4, new ListNode(5, new ListNode(6))))
+    )
+  )
+);
+
+const removelVal = (head, val) => {
+  let dummy = new ListNode(-1);
+  dummy.next = head;
+  let current = dummy;
+  while (current !== null && current.next !== null) {
+    if (current.next.val === val) {
+      current.next = current.next.next;
+    } else {
+      current = current.next;
+    }
+  }
+  return dummy.next;
+};
+
 // Definition for a binary tree node.
 function TreeNode(val, left = null, right = null) {
   this.val = val;
@@ -213,18 +238,15 @@ function maxDepth(root) {
   let leftDepth = 0;
   if (root.left !== null) {
     leftDepth = maxDepth(root.left);
-    console.log("left condition true", root.val);
   }
 
   // Variable to store the depth of the right subtree.
   let rightDepth = 0;
   if (root.right !== null) {
     rightDepth = maxDepth(root.right);
-    console.log("right condition true", root.val);
   }
-  console.log(typeof leftDepth);
 
-  // The maximum depth is the greater of the two depths plus one for the current node.
+  // The maximum depth is the greater of the two depths plus one for the current nodew.
   let max = 0;
   if (leftDepth > rightDepth) {
     max = leftDepth + 1;
@@ -235,12 +257,51 @@ function maxDepth(root) {
   return max;
 }
 
+var isSameTree = function (p, q) {
+  if (!p && !q) {
+    return true;
+  }
+  if (!p || !q) {
+    return false;
+  }
+
+  if (p.val !== q.val) {
+    return false;
+  }
+
+  return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+};
+
+const root = new TreeNode(4);
+root.left = new TreeNode(2);
+root.right = new TreeNode(7);
+root.left.left = new TreeNode(1);
+root.left.right = new TreeNode(3);
+root.right.left = new TreeNode(6);
+root.right.right = new TreeNode(9);
+var invertTree = function (root) {
+  if (root === null) {
+    return null;
+  }
+
+  let rightNode = root.left;
+  let leftNode = root.right;
+  root.left = leftNode;
+  root.right = rightNode;
+
+  invertTree(root.left);
+  invertTree(root.right);
+  return root;
+};
+
 // Example usage:
 // The input is represented as a tree: [3,9,20,null,null,15,7]
-let root = new TreeNode(3);
-root.left = new TreeNode(9);
-root.right = new TreeNode(20);
-root.right.left = new TreeNode(15);
-root.right.right = new TreeNode(7);
+let q = new TreeNode(3);
+q.left = new TreeNode(2);
+q.right = new TreeNode(20);
 
-console.log(maxDepth(root)); // Output: 3
+let p = new TreeNode(3);
+p.left = new TreeNode(9);
+p.right = new TreeNode(20);
+
+console.log(invertTree(root));
